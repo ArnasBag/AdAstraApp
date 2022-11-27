@@ -48,12 +48,16 @@ export default{
 }
 
 .navbar {
+    position: fixed;
+    height: 64px;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding-left: 1rem;
     padding-right: 1rem;
     background-color: white;
+    box-shadow: 0 0 11px rgba(33,33,33,.2); 
 }
 .hamburger {
     display: none;

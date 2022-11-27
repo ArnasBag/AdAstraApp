@@ -7,68 +7,98 @@ export default {
 </script>
 
 <template>
-<a class="card" href="#">
-    <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557177324-56c542165309?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80)"></div>
-    <div class="card__content">
-        <p class="card__category">Category</p>
-        <h3 class="card__heading">Example Card Heading</h3>
-    </div>
-</a>
+<div class="trip">
+  <div class="header-container">
+      <div class="header-user">
+          <i class="fa-regular fa-circle-user fa-2xl" />
+      </div>
+      <div class="author-info">
+          <h3>John Johnson</h3>
+          <p>Nov 27</p>
+      </div>
+  </div>
+  <div class="trip-content">
+      <div class="trip-title">
+          <h1 class="trip-header">My test trip 1</h1>
+          <div class="trip-meta">
+              <div>
+                  <i class="align fa-solid fa-calendar-days"></i>
+                  <p class="align-p">2022/01/01 - 2022/01/05</p>
+              </div>
+              <div>
+                  <i class="align fa-solid fa-location-dot"></i>
+                  <p class="align-p">Kaunas, Lithuania</p>
+              </div>
+          </div>
+      </div>
+
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</p>
+  </div>
+  <div class="trip-impressions">
+      <div class="trip-impression">
+          <i class="align fa-solid fa-heart fa-xl"></i>
+          <p class="align-p">6,4k likes</p>
+      </div>
+      <div class="trip-impression">
+          <i class="align fa-solid fa-comment fa-xl"></i>
+          <p class="align-p">100 comments</p>
+      </div>
+  </div>
+</div>
 </template>
 
 <style scoped>
-.card{
-  list-style: none;
-  position: relative;
-}
+  .header-container{
+      margin-bottom: 32px;
+      display: flex;
+      justify-content: space-between;
+  }
+  .trip{
+      width: 65%;
+      padding: 64px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 11px rgba(33,33,33,.2); 
+      margin: 24px;
+  }
+  .trip-header{
+      color: #8338ec;
+      font-size: 3rem;
+      font-weight: lighter;
+  }
+  .author-info{
+      height: 32px;
+      display: flex;
+      flex-direction: column;
+  }
+  .trip-content{
+      margin-bottom: 16px;
+  }
+  .trip-impression{
+      display: inline-block;
+  }
+  .align{
+      display: inline-block;
+      vertical-align: middle;
+  }
+  .align-p{
+      margin-left: 8px;
+      display: inline-block;
+      vertical-align: middle;
+  }
+  .trip-impressions{
+      display: flex;
+      justify-content: space-between;
+  }
+  .trip-title{
+      margin-bottom: 24px;
 
-.card:before{
-  content: '';
-  display: block;
-  padding-bottom: 150%;
-  width: 100%;
-}
-
-.card__background{
-  background-size: cover;
-  background-position: center;
-  border-radius: 10px;
-  bottom: 0;
-  filter: brightness(0.75) saturate(1.2) contrast(0.85);
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  transform-origin: center;
-  trsnsform: scale(1) translateZ(0);
-  transition: 
-    filter 200ms linear,
-    transform 200ms linear;
-}
-
-.card:hover .card__background{
-  transform: scale(1.05) translateZ(0);
-}
-
-.card__content{
-  left: 0;
-  padding: 24px;
-  position: absolute;
-  top: 0;
-}
-
-.card__category{
-  color: rgba(255,255,255,0.6);
-  font-size: 0.9rem;
-  margin-bottom: 8px;
-  text-transform: uppercase;
-}
-
-.card__heading{
-  color: rgba(255,255,255,0.9);
-  font-size: 1.9rem;
-  text-shadow: 2px 2px 20px rgba(0,0,0,0.2);
-  line-height: 1.4;
-  word-spacing: 100vw;
-}
+  }
+  .trip-meta{
+      display: flex;
+      justify-content: space-between;
+  }
+  hr{
+      border-top: 2px solid #8338ec;
+  }
 </style>

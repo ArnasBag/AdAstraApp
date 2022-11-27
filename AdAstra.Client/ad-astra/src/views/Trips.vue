@@ -2,59 +2,70 @@
 import Trip from '../components/Trip.vue'
 
 export default {
-    components: {
-        Trip,
-    }
+  components: {
+    Trip,
+  }
 }
 
 </script>
 
 <template>
-<section class="hero-section">
-    <div class="card-grid">
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
+  <div class="flex-page">
+    <div class="side-nav">
+      <ul>
+        <h1>test</h1>
+      </ul>
     </div>
-</section>
+    <div class="content">
+      <Trip class="mobile-width"/>
+      <Trip class="mobile-width"/>
+      <Trip class="mobile-width"/>
+      <Trip class="mobile-width"/>
+    </div>
+</div>
 </template>
 
 <style scoped>
-.hero-section{
-  align-items: flex-start;
+html, body{
+  overflow: hidden !important;
+}
+.flex-page {
   display: flex;
-  min-height: 100%;
-  justify-content: center;
-  padding: 64px 24px;
-  background-color: white;
+  overflow: hidden;
 }
 
-.card-grid{
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-column-gap: 24px;
-  grid-row-gap: 24px;
-  max-width: 1200px;
-  width: 100%;
+.side-nav {
+  background: white;
+  display: flex;
+  flex: 1;
+  box-shadow: 0 0 11px rgba(33,33,33,.2); 
+  border-radius: 10px;
+  position: fixed;
+  height: 100%;
+  width: 300px;
+  z-index: -1;
+  padding-top: 96px;
+}
+
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 3;
+  margin-left: 312px;
   margin-top: 96px;
 }
 
-@media(min-width: 540px){
-  .card-grid{
-    grid-template-columns: repeat(2, 1fr); 
+@media only screen and (max-width: 768px) {
+  .side-nav{
+    display: none;
+  }
+  .content{
+    margin-left: 0px;
+  }
+  .mobile-width{
+    width: 100%;
   }
 }
 
-@media(min-width: 960px){
-  .card-grid{
-    grid-template-columns: repeat(4, 1fr); 
-  }
-}
 </style>
