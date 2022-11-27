@@ -11,7 +11,7 @@ using Xunit;
 
 namespace AdAstra.IntegrationTests
 {
-    public class TripControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
+    public class TripControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>, IDisposable
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<Program> _factory;
@@ -35,9 +35,10 @@ namespace AdAstra.IntegrationTests
             });
         }
 
+        public void Dispose() => _context.Dispose();
 
         [Fact]
-        public async void Test1()
+        public async void GetAllTrips_ReturnsCorrectDataFromDb()
         {
             var guid = Guid.NewGuid().ToString();
 
@@ -85,6 +86,7 @@ namespace AdAstra.IntegrationTests
             });
 
             Assert.Equal(expectedString, tripsString);
+            Dispose();
         }
     }
 }
