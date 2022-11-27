@@ -17,7 +17,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-await SeedData();
+//await SeedData();
 
 app.UseSwagger();
 app.UseSwaggerUI();
@@ -43,3 +43,5 @@ async Task SeedData()
         await seeder.SeedAsync();
     }
 }
+
+public partial class Program { }
