@@ -25,8 +25,6 @@ export default{
     text-align:center;
     border: none;
     background-size: 300% 100%;
-    margin-top: 30px;
-    margin-right: 30px;
 
     border-radius: 10px;
     moz-transition: all .4s ease-in-out;

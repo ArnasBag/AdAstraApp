@@ -1,9 +1,9 @@
 <script>
-import Trip from '../components/Trip.vue'
+import Post from '../components/Post.vue'
 
 export default {
     components: {
-        Trip,
+        Post,
     }
 }
 
@@ -12,16 +12,11 @@ export default {
 <template>
 <section class="hero-section">
     <div class="card-grid">
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
-        <Trip></Trip>
+        <Post></Post>
+        <Post></Post>
+        <Post></Post>
+        <Post></Post>
+
     </div>
 </section>
 </template>
@@ -33,7 +28,11 @@ export default {
   min-height: 100%;
   justify-content: center;
   padding: 64px 24px;
-  background-color: white;
+  background-color: #2d2d30;
+  margin-left: 5%;
+  margin-right: 5%;
+  border-radius: 10px;
+  margin-top: 80px;
 }
 
 .card-grid{
@@ -43,7 +42,6 @@ export default {
   grid-row-gap: 24px;
   max-width: 1200px;
   width: 100%;
-  margin-top: 96px;
 }
 
 @media(min-width: 540px){

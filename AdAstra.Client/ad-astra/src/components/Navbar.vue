@@ -1,6 +1,9 @@
 <template>
     <nav class="navbar">
-        <img class="logo" src="../assets/images/Galaxy-94.png" alt="Logo">
+        <div class="logo-area">
+            <img class="logo" src="../assets/images/Galaxy-94.png" alt="Logo">
+            <h1 style="color: #8338ec;">Ad Astra</h1>
+        </div>
         <ul class="nav-menu">
             <li class="nav-item">
                 <router-link class="nav-link" to="/trips">Trips</router-link>
@@ -40,7 +43,10 @@ export default{
 
 
 <style scoped>
-
+.logo-area{
+    display: flex;
+    align-items: center;
+}
 .logo{
     height: 64px;
     width: auto;
@@ -56,7 +62,7 @@ export default{
     align-items: center;
     padding-left: 1rem;
     padding-right: 1rem;
-    background-color: white;
+    background-color: #1a1a1c;
     box-shadow: 0 0 11px rgba(33,33,33,.2); 
 }
 .hamburger {
