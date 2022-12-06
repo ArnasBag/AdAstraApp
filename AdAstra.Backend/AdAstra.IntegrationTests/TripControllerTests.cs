@@ -1,17 +1,22 @@
 using AdAstra.DataAccess.Data;
 using AdAstra.DataAccess.Entities;
 using AdAstra.Dtos;
+using AdAstra.IntegrationTests.TestAuth;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 using Xunit;
 
 namespace AdAstra.IntegrationTests
 {
-    public class TripControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>, IDisposable
+    public class TripControllerTests : IClassFixture<CustomWebApplicationFactory<Program>>
     {
         private readonly HttpClient _client;
         private readonly CustomWebApplicationFactory<Program> _factory;
@@ -29,13 +34,25 @@ namespace AdAstra.IntegrationTests
             _context.Database.EnsureCreated();
 
 
+            //_client = _factory.WithWebHostBuilder(builder =>
+            //{
+            //    builder.ConfigureTestServices(services =>
+            //    {
+            //        services.AddAuthentication("Test")
+            //            .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
+            //    });
+            //}).CreateClient(new WebApplicationFactoryClientOptions
+            //{
+            //    AllowAutoRedirect = false,
+            //});
+
             _client = factory.CreateClient(new WebApplicationFactoryClientOptions
             {
                 AllowAutoRedirect = false
             });
-        }
 
-        public void Dispose() => _context.Dispose();
+            _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Test");
+        }
 
         [Fact]
         public async void GetAllTrips_ReturnsCorrectDataFromDb()
@@ -86,7 +103,41 @@ namespace AdAstra.IntegrationTests
             });
 
             Assert.Equal(expectedString, tripsString);
-            Dispose();
+        }
+
+        [Fact]
+        public async void AddTrip_PostsDataCorrectly()
+        {
+            _context.Users.Add(new ApplicationUser
+            {
+                Id = "test",
+                FirstName = "test"
+            });
+
+            await _context.SaveChangesAsync();
+
+            var request = new TripPostDto
+            {
+                Name = "test1",
+                Description = "test1",
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now
+            };
+
+            var json = JsonSerializer.Serialize(request);
+
+            var response = await _client.PostAsync("api/trips", new StringContent(json, Encoding.UTF8, "application/json"));
+
+            response.EnsureSuccessStatusCode();
+
+            var fromDb = await _client.GetAsync("api/trips/1");
+
+            var jsonFromDb = await fromDb.Content.ReadAsStringAsync();
+
+            var entity = JsonSerializer.Deserialize<TripViewDto>(jsonFromDb);
+
+            Assert.Equal(entity.Name, request.Name);
+            Assert.Equal(entity.Description, request.Description);
         }
     }
 }

@@ -34,7 +34,7 @@ namespace AdAstra.Controllers
             return Ok(trip);
         }
 
-        [Authorize(Roles = "User")]
+        [Authorize(AuthenticationSchemes = "Test")]
         [HttpPost("trips")]
         public async Task<IActionResult> AddTrip(TripPostDto request)
         {

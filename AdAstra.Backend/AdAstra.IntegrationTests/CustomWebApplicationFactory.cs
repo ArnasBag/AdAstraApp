@@ -1,4 +1,6 @@
 ﻿using AdAstra.DataAccess.Data;
+using AdAstra.IntegrationTests.TestAuth;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
@@ -41,6 +43,9 @@ namespace AdAstra.IntegrationTests
                     var connection = container.GetRequiredService<DbConnection>();
                     options.UseSqlite(connection);
                 });
+
+                services.AddAuthentication("Test")
+                        .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
             });
 
             builder.UseEnvironment("Development");

@@ -14,7 +14,7 @@ namespace AdAstra.DataAccess.Extensions
         public static void ConfigureDataAccess(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options => 
-                options.UseSqlServer(configuration.GetConnectionString("Default")));
+                options.UseMySql(configuration.GetConnectionString("Default"), ServerVersion.AutoDetect(configuration.GetConnectionString("Default"))));
 
             services.AddTransient<IBaseRepository<Trip>, TripRepository>();
             services.AddTransient<IBaseRepository<Post>, PostRepository>();

@@ -1,6 +1,5 @@
 ﻿using AdAstra.DataAccess.Data;
 using AdAstra.DataAccess.Entities;
-using AdAstra.Identity;
 using AdAstra.Interfaces;
 using AdAstra.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -43,16 +42,10 @@ namespace AdAstra.Extensions
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key"]))
                 };
             });
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("SameUser", policy => policy.Requirements.Add(new SameUserRequirement()));
-            });
         }
 
         public static void ConfigureDependencyInjection(this IServiceCollection services)
         {
-            services.AddTransient<IAuthorizationHandler, TripAuthorizationHandler>();
             services.AddTransient<IAuthService, AuthService>();       
             services.AddTransient<ITripService, TripService>();
             services.AddTransient<IPostService, PostService>();

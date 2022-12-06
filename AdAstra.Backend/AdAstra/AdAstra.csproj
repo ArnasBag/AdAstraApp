@@ -21,4 +21,8 @@
     <ProjectReference Include="..\AdAstra.DataAccess\AdAstra.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Identity\" />
+  </ItemGroup>
+
 </Project>
