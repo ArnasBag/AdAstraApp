@@ -1,35 +1,41 @@
 <script>
 
 export default {
-
+  props: {
+    postData: {
+      type: Object,
+      required: true
+    }
+  }
 }
 
 </script>
 
 <template>
-<a class="card" href="#">
-    <div class="card__background" style="background-image: url(https://images.unsplash.com/photo-1557177324-56c542165309?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80)"></div>
-    <div class="card__content">
-        <p class="card__category">Category</p>
-        <h3 class="card__heading">Example Card Heading</h3>
+  <router-link class="card" :to="{ name: 'Post', params: { tripId: this.$route.params.tripId, postId: 1 } }">
+    <div class="card-background" :style="{ 'background-image': 'url(' + postData.photoUrl + ')' }"></div>
+    <div class=" card-content">
+      <p class="card-category">Category</p>
+      <h3 class="card-heading">{{ postData.title }}</h3>
     </div>
-</a>
+  </router-link>
 </template>
 
 <style scoped>
-.card{
+.card {
   list-style: none;
   position: relative;
+  z-index: 0;
 }
 
-.card:before{
+.card:before {
   content: '';
   display: block;
   padding-bottom: 150%;
   width: 100%;
 }
 
-.card__background{
+.card-background {
   background-size: cover;
   background-position: center;
   border-radius: 10px;
@@ -40,34 +46,35 @@ export default {
   right: 0;
   top: 0;
   transform-origin: center;
-  trsnsform: scale(1) translateZ(0);
-  transition: 
+  transform: scale(1) translateZ(0);
+  transition:
     filter 200ms linear,
     transform 200ms linear;
+  z-index: 0;
 }
 
-.card:hover .card__background{
+.card:hover .card-background {
   transform: scale(1.05) translateZ(0);
 }
 
-.card__content{
+.card-content {
   left: 0;
   padding: 24px;
   position: absolute;
   top: 0;
 }
 
-.card__category{
-  color: rgba(255,255,255,0.6);
+.card-category {
+  color: rgba(255, 255, 255, 0.6);
   font-size: 0.9rem;
   margin-bottom: 8px;
   text-transform: uppercase;
 }
 
-.card__heading{
-  color: rgba(255,255,255,0.9);
+.card-heading {
+  color: rgba(255, 255, 255, 0.9);
   font-size: 1.9rem;
-  text-shadow: 2px 2px 20px rgba(0,0,0,0.2);
+  text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.2);
   line-height: 1.4;
   word-spacing: 100vw;
 }

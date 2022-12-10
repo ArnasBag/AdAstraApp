@@ -6,6 +6,10 @@
     box-sizing: border-box;
 }
 
+body{
+    padding-top: 64px;
+}
+
 html {
     font-family: 'Roboto', sans-serif;
 }
@@ -20,7 +24,6 @@ html {
 html, body{
     height: 100%;
     margin: 0;
-    padding: 0;
     background-color: #1a1a1c
 }
 h1, h2, h3, p{

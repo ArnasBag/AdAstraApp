@@ -6,14 +6,21 @@
         </div>
         <ul class="nav-menu">
             <li class="nav-item">
+                <router-link to="/my-trips">
+                    <Button class="auth-btn" v-if="isAuthenticated" text="My trips" />
+                </router-link>
+            </li>
+            <li class="nav-item">
                 <router-link class="nav-link" to="/trips">Trips</router-link>
-                <!-- <a href="#" class="nav-link">Trips</a> -->
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">About</a>
             </li>
             <li class="nav-item">
                 <a href="#" class="nav-link">Contact</a>
+            </li>
+            <li class="nav-item">
+                <Button class="auth-btn" v-if="isAuthenticated" @click="logout" text="Logout" />
             </li>
         </ul>
         <div class="hamburger">
@@ -25,8 +32,26 @@
 </template>
 
 <script>
-export default{
-    mounted(){
+import Button from '../components/Button.vue'
+import { mapState } from 'vuex'
+
+export default {
+    components: {
+        Button,
+    },
+
+    computed: {
+        ...mapState('auth', ['isAuthenticated']),
+    },
+
+    methods: {
+        logout() {
+            this.$store.dispatch('auth/logout');
+            this.$router.push('/');
+        },
+    },
+    mounted() {
+
         const hamburger = document.querySelector(".hamburger");
         const navMenu = document.querySelector(".nav-menu");
 
@@ -38,16 +63,24 @@ export default{
             navMenu.classList.toggle("active");
         }
     }
-}
+};
 </script>
 
 
 <style scoped>
-.logo-area{
+.auth-btn {
+    width: auto;
+    height: auto;
+    padding: 12px;
+    margin: 0;
+}
+
+.logo-area {
     display: flex;
     align-items: center;
 }
-.logo{
+
+.logo {
     height: 64px;
     width: auto;
     filter: invert(20%) sepia(69%) saturate(3071%) hue-rotate(257deg) brightness(111%) contrast(96%);
@@ -55,19 +88,22 @@ export default{
 
 .navbar {
     position: fixed;
-    height: 64px;
+    top: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-left: 1rem;
-    padding-right: 1rem;
-    background-color: #1a1a1c;
-    box-shadow: 0 0 11px rgba(33,33,33,.2); 
+    padding-left: 1%;
+    padding-right: 1%;
+    background-color: #29292b;
+    box-shadow: 0 0 11px rgba(33, 33, 33, .2);
+
 }
+
 .hamburger {
     display: none;
 }
+
 .bar {
     display: block;
     width: 25px;
@@ -77,6 +113,7 @@ export default{
     transition: all 0.3s ease-in-out;
     background-color: #101010;
 }
+
 .nav-menu {
     display: flex;
     justify-content: space-between;
@@ -87,13 +124,13 @@ export default{
     margin-left: 5rem;
 }
 
-.nav-link{
+.nav-link {
     font-size: 1.2rem;
     font-weight: 400;
     color: #8338ec;
 }
 
-.nav-link:hover{
+.nav-link:hover {
     color: #482ff7;
 }
 
@@ -102,6 +139,7 @@ export default{
     font-weight: 500;
     color: #482ff7;
 }
+
 @media only screen and (max-width: 768px) {
     .nav-menu {
         position: fixed;
@@ -129,6 +167,7 @@ export default{
         display: block;
         cursor: pointer;
     }
+
     .hamburger.active .bar:nth-child(2) {
         opacity: 0;
     }
@@ -140,6 +179,6 @@ export default{
     .hamburger.active .bar:nth-child(3) {
         transform: translateY(-8px) rotate(-45deg);
     }
-    
+
 }
 </style>

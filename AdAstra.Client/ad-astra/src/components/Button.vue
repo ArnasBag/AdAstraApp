@@ -1,33 +1,33 @@
 <script>
 
-export default{
+export default {
     name: 'Button',
     props: {
-        text : String,
+        text: String,
     }
 }
 
 </script>
 
 <template>
-    <button @click="$emit('onClick')" class="btn-hover btn-1">{{text}}</button>
+    <button @click="$emit('onClick')" class="btn-hover btn-1">{{ text }}</button>
 </template>
 
 <style scoped>
-
 .btn-hover {
     width: 200px;
+    max-width: 100%;
     font-size: 16px;
     font-weight: 600;
     color: #fff;
     cursor: pointer;
     height: 55px;
-    text-align:center;
+    text-align: center;
     border: none;
     background-size: 300% 100%;
+    margin-bottom: 24px;
 
     border-radius: 10px;
-    moz-transition: all .4s ease-in-out;
     -o-transition: all .4s ease-in-out;
     -webkit-transition: all .4s ease-in-out;
     transition: all .4s ease-in-out;
@@ -42,6 +42,6 @@ export default{
 }
 
 .btn-1 {
-    background-image: linear-gradient(90deg, rgba(104,12,235,1) 0%, rgba(142,91,214,1) 50%, rgba(169,118,240,1) 100%);
+    background-image: linear-gradient(90deg, rgba(104, 12, 235, 1) 0%, rgba(142, 91, 214, 1) 50%, rgba(169, 118, 240, 1) 100%);
 }
 </style>

@@ -1,54 +1,64 @@
 <script>
 import Button from './Button.vue'
-export default{
-    props: {
-        show: Boolean
-    },
-    components: {
-        Button
+import { mapState } from 'vuex'
+
+import { popModal } from 'jenesius-vue-modal'
+
+export default {
+  data() {
+    return {
+      user: {
+        email: '',
+        password: ''
+      }
     }
+  },
+
+  props: {
+    show: Boolean
+  },
+
+  components: {
+    Button
+  },
+
+  computed: {
+    ...mapState({
+      isAuthenticated: state => state.authentication.isAuthenticated,
+    }),
+  },
+
+  methods: {
+    login() {
+      this.$store.dispatch('auth/login', this.user);
+      popModal();
+      this.$router.push('/trips');
+    },
+  },
+
 }
 </script>
 
 <template>
-    <Transition name="login">
-        <div v-if="show" class="modal-mask">
-            <div class="login">         
-                <h2 class="login-header">Log in</h2>
-
-                <form class="login-container">
-                    <p><input type="email" placeholder="Email"></p>
-                    <p><input type="password" placeholder="Password"></p>
-                    <div class="center">
-                        <Button style="margin: 0" text='Log in'/>
-                    </div>
-                </form>
-            </div>               
-        </div>
-    </Transition>
+  <div class="login">
+    <h2 class="login-header">Log in</h2>
+    <form @submit.prevent="login" class="login-container">
+      <p><input v-model="user.email" type="email" placeholder="Email"></p>
+      <p><input v-model="user.password" type="password" placeholder="Password"></p>
+      <div class="center">
+        <Button style="margin: 0" text='Log in' />
+      </div>
+    </form>
+  </div>
 </template>
 
 <style scoped>
-
-.center{
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  transition: opacity 0.1s ease;
+.center {
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
+
 .login {
   width: 400px;
   margin: 16px auto;
@@ -77,7 +87,7 @@ export default{
 }
 
 .login-container {
-  background: white;
+  background: #1a1a1c;
   padding: 12px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -105,6 +115,7 @@ export default{
   background: #fff;
   border-color: #bbb;
   color: #555;
+  border-radius: 10px;
 }
 
 /* Text fields' focus effect */

@@ -1,61 +1,106 @@
 <script>
 import Button from './Button.vue'
+import { popModal } from 'jenesius-vue-modal'
+import { mapActions } from 'vuex';
 
 export default {
-    props: {
-        show: Boolean
-    },
-    components: {
-        Button,
+  data() {
+    return {
+      trip: {
+        name: '',
+        description: '',
+        location: '',
+        coverUrl: 'https://picsum.photos/1920/1080',
+        startDate: '',
+        endDate: ''
+      },
     }
+  },
+
+  props: {
+    show: Boolean
+  },
+
+  components: {
+    Button,
+  },
+  methods: {
+    ...mapActions('trips', ['addTrip']),
+
+    create() {
+      this.addTrip(this.trip)
+      popModal()
+    }
+  }
 }
 
 </script>
 
 <template>
- <Transition name="trip-create">
-        <div v-if="show" class="modal-mask">
-            <div class="trip-create">         
-                <h2 class="trip-create-header">Create new trip</h2>
+  <div class="trip-create">
+    <h2 class="trip-create-header">Create new trip</h2>
 
-                <form class="trip-create-container">
-                    <p><input type="email" placeholder="Email"></p>
-                    <p><input type="password" placeholder="Password"></p>
-                    <div class="center">
-                        <Button style="margin: 0" text='Create'/>
-                    </div>
-                </form>
-            </div>               
-        </div>
-    </Transition>
+    <form class="trip-create-container" @submit.prevent="create">
+      <div class="block">
+        <label for="name">Trip name</label>
+        <input id="name" type="text" placeholder="Trip name" v-model="trip.name">
+      </div>
+      <div class="block">
+        <label for="description">Trip description</label>
+        <input id="description" type="text" placeholder="Trip description" v-model="trip.description">
+      </div>
+      <div class="block">
+        <label for="location">Trip location</label>
+        <input id="location" type="text" placeholder="Trip location" v-model="trip.location">
+      </div>
+      <div class="block">
+        <label for="cover">Cover photo</label>
+        <input id="cover" type="file">
+      </div>
+      <div class="block">
+        <label for="startDate">Start date</label>
+        <input id="startDate" type="date" v-model="trip.startDate">
+      </div>
+      <div class="block">
+        <label for="endDate">End date</label>
+        <input id="endDate" type="date" v-model="trip.endDate">
+      </div>
+      <div class="center">
+        <Button style="margin: 0" text='Create' />
+      </div>
+    </form>
+  </div>
 </template>
 
 <style scoped>
-.center{
-    justify-content: center;
-    align-items: center;
-    text-align: center;
+.block {
+  margin-bottom: 18px;
 }
 
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  transition: opacity 0.1s ease;
+#cover {
+  background-color: white;
+}
+
+.center {
   justify-content: center;
   align-items: center;
+  text-align: center;
+  margin-top: 12px;
 }
+
 .trip-create {
   width: 400px;
   margin: 16px auto;
   font-size: 16px;
   border-radius: 20px;
+}
 
+.trip-create-container label {
+  color: white;
+}
+
+.trip-create-container input {
+  border-radius: 10px;
 }
 
 /* Reset top and bottom margins from certain elements */
@@ -78,7 +123,7 @@ export default {
 }
 
 .trip-create-container {
-  background: white;
+  background: #1a1a1c;
   padding: 12px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;

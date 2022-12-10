@@ -1,6 +1,15 @@
 <script>
 
 export default {
+    props: {
+        comment: {
+            required: true,
+            type: Object
+        }
+    },
+    // created() {
+    //     console.log(comment)
+    // }
 
 }
 
@@ -10,15 +19,11 @@ export default {
     <div class="comment">
         <div class="comment-header">
             <div class="comment-author">
-                <i class="fa-regular fa-circle-user fa-2xl" />
-                <div style="display: flex; align-items: baseline; margin-left:15px;">
-                    <h1 style="color: #8338ec;">John Johnson</h1>
-                    <!-- <h3>30 minutes ago</h3> -->
-                </div>
+                <h1 style="color: #8338ec;">{{ comment.user.firstName }} {{ comment.user.lastName }}</h1>
             </div>
         </div>
         <div class="comment-content">
-            <p>Lorem ipsum odfhjsiaofhdisoahflsdhafjdk.</p>
+            <p>{{ comment.body }}</p>
         </div>
         <div class="comment-impression">
 
@@ -27,6 +32,10 @@ export default {
 </template>
 
 <style scoped>
+h1 {
+    font-size: 1.5rem;
+}
+
 .comment-author {
     display: flex;
     align-items: baseline;

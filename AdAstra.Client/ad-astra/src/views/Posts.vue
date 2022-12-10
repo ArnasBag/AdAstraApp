@@ -1,41 +1,72 @@
 <script>
 import Post from '../components/Post.vue'
+import Button from '../components/Button.vue'
+import { mapState, mapActions } from 'vuex'
+import PostCreate from '../components/PostCreate.vue'
+import { openModal } from 'jenesius-vue-modal'
 
 export default {
-    components: {
-        Post,
+  components: {
+    Post,
+    Button,
+    PostCreate,
+  },
+  computed: {
+    ...mapState('posts', ['posts'])
+  },
+
+  methods: {
+    ...mapActions('posts', ['getPosts', 'setPosts']),
+
+    createPost() {
+      openModal(PostCreate)
     }
+  },
+
+  created() {
+    this.getPosts()
+  },
+
+  async beforeRouteLeave(to, from, next) {
+    this.setPosts([]);
+    next();
+  }
 }
 
 </script>
 
 <template>
-<section class="hero-section">
-    <div class="card-grid">
-        <Post></Post>
-        <Post></Post>
-        <Post></Post>
-        <Post></Post>
-
+  <div class="content">
+    <div class="side-nav">
+      <Button text="Filter" />
+      <Button @click="createPost" text="Add new post" />
     </div>
-</section>
+    <div class="cards">
+      <div class="card-grid">
+        <Post v-for="post in posts" v-bind:key="post.id" :postData="post"></Post>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-.hero-section{
-  align-items: flex-start;
-  display: flex;
-  min-height: 100%;
-  justify-content: center;
-  padding: 64px 24px;
-  background-color: #2d2d30;
-  margin-left: 5%;
-  margin-right: 5%;
+.side-nav {
+  box-shadow: 0 0 11px rgba(33, 33, 33, .2);
   border-radius: 10px;
-  margin-top: 80px;
+  padding: 12px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
-.card-grid{
+.cards {
+  margin-top: 2%;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.card-grid {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-column-gap: 24px;
@@ -44,15 +75,15 @@ export default {
   width: 100%;
 }
 
-@media(min-width: 540px){
-  .card-grid{
-    grid-template-columns: repeat(2, 1fr); 
+@media(min-width: 540px) {
+  .card-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media(min-width: 960px){
-  .card-grid{
-    grid-template-columns: repeat(4, 1fr); 
+@media(min-width: 960px) {
+  .card-grid {
+    grid-template-columns: repeat(4, 1fr);
   }
 }
 </style>

@@ -2,6 +2,7 @@
 import Trip from '../components/Trip.vue'
 import Button from '../components/Button.vue'
 import TripCreate from '../components/TripCreate.vue'
+import axios from 'axios';
 
 export default {
   components: {
@@ -19,9 +20,17 @@ export default {
   methods: {
     async getTrips() {
       try {
-        const response = await this.$http.get("https://localhost:7097/api/trips")
+        const response = await axios.get("https://localhost:7097/api/trips");
+        this.trips = response.data;
       }
-    }
+      catch (error) {
+        console.log(error.response)
+      }
+    },
+  },
+
+  created() {
+    this.getTrips();
   }
 }
 
@@ -30,24 +39,29 @@ export default {
 <template>
   <div class="content">
     <div class="side-nav">
-      <Button @on-click="showTripCreate = true" text="Add new trip" />
-      <Teleport to="body">
-        <TripCreate :show="showTripCreate" @close="showTripCreate = false">
-
-        </TripCreate>
-      </Teleport>
+      <Button text="Filter" />
     </div>
-    <div class="trip-content">
-      <Trip class="trip" />
+    <div class="cards">
+      <Trip v-for="trip in trips" v-bind:key="trip.id" :trip="trip" />
     </div>
 
   </div>
 </template>
 
 <style scoped>
+.cards {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+
 .trip-content {
-  flex: 1 1 80%;
-  margin-right: 32px;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  grid-column-gap: 24px;
+  grid-row-gap: 24px;
+  max-width: 1200px;
+  width: 100%;
 }
 
 .side-nav {
@@ -55,16 +69,15 @@ export default {
   border-radius: 10px;
   margin: 12px;
   padding: 12px;
-  flex: 1 1 20%
-}
-
-.trip {
-  margin: 12px;
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .content {
-  margin-top: 96px;
   display: flex;
+  flex-direction: row;
 }
 
 @media only screen and (max-width: 768px) {
@@ -72,11 +85,7 @@ export default {
     display: none;
   }
 
-  .content {
-    margin-left: 0px;
-  }
-
-  .mobile-width {
+  .cards {
     width: 100%;
   }
 }
