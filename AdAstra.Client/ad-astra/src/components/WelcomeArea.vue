@@ -4,6 +4,7 @@ import Login from './Login.vue'
 import Register from './Register.vue'
 import { openModal } from 'jenesius-vue-modal'
 
+
 export default {
     name: 'WelcomeArea',
     components: {
@@ -19,7 +20,6 @@ export default {
     },
     methods: {
         openLogin() {
-            console.log('triggered')
             openModal(Login);
         }
     }

@@ -30,6 +30,24 @@ h1, h2, h3, p{
     color: white;
 }
 
+label{
+    color: #c8c8c8
+}
+
+input[type=text]{
+    color: #c8c8c8;
+}
+input[type=date]{
+    color: #c8c8c8;
+}
+input[type=file]::file-selector-button{
+    color: #c8c8c8;
+}
+
+textarea{
+    color: #c8c8c8 !important;
+}
+
 li {
     list-style: none;
 }

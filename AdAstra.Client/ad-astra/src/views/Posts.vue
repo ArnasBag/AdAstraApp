@@ -23,13 +23,9 @@ export default {
     }
   },
 
-  created() {
+  async created() {
     this.getPosts()
-  },
-
-  async beforeRouteLeave(to, from, next) {
-    this.setPosts([]);
-    next();
+    console.log(this.posts)
   }
 }
 
@@ -39,7 +35,9 @@ export default {
   <div class="content">
     <div class="side-nav">
       <Button text="Filter" />
-      <Button @click="createPost" text="Add new post" />
+      <router-link to="/trips/create">
+        <Button text="Add new trip" />
+      </router-link>
     </div>
     <div class="cards">
       <div class="card-grid">

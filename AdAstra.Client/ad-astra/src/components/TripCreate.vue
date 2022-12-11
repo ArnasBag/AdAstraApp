@@ -1,7 +1,7 @@
 <script>
 import Button from './Button.vue'
-import { popModal } from 'jenesius-vue-modal'
 import { mapActions } from 'vuex';
+import { routerKey } from 'vue-router';
 
 export default {
   data() {
@@ -24,154 +24,102 @@ export default {
   components: {
     Button,
   },
+
   methods: {
     ...mapActions('trips', ['addTrip']),
 
     create() {
       this.addTrip(this.trip)
-      popModal()
+      this.$router.push('/my-trips')
     }
   }
 }
 
 </script>
-
 <template>
-  <div class="trip-create">
-    <h2 class="trip-create-header">Create new trip</h2>
+  <div class="container">
+    <div>
+      <FormKit type="form" id="createTripForm" @submit="create">
+        <div class="form-container">
+          <div class="form-text-inputs">
+            <FormKit v-model="trip.name" label="Trip name" type="text" validation="required"
+              placeholder="Write a name for your trip" />
+            <FormKit v-model="trip.location" label="Trip location" type="text" validation="required"
+              placeholder="Write a location for your trip" />
+            <FormKit v-model="trip.startDate" label="Trip starting date" type="date" validation="required"
+              placeholder="Write a starting date for your trip" />
+            <FormKit v-model="trip.endDate" label="Trip ending date" type="date" validation="required"
+              placeholder="Write an ending date for your trip" />
 
-    <form class="trip-create-container" @submit.prevent="create">
-      <div class="block">
-        <label for="name">Trip name</label>
-        <input id="name" type="text" placeholder="Trip name" v-model="trip.name">
-      </div>
-      <div class="block">
-        <label for="description">Trip description</label>
-        <input id="description" type="text" placeholder="Trip description" v-model="trip.description">
-      </div>
-      <div class="block">
-        <label for="location">Trip location</label>
-        <input id="location" type="text" placeholder="Trip location" v-model="trip.location">
-      </div>
-      <div class="block">
-        <label for="cover">Cover photo</label>
-        <input id="cover" type="file">
-      </div>
-      <div class="block">
-        <label for="startDate">Start date</label>
-        <input id="startDate" type="date" v-model="trip.startDate">
-      </div>
-      <div class="block">
-        <label for="endDate">End date</label>
-        <input id="endDate" type="date" v-model="trip.endDate">
-      </div>
-      <div class="center">
-        <Button style="margin: 0" text='Create' />
-      </div>
-    </form>
+          </div>
+          <div class="form-image-input">
+            <FormKit type="group" :config="{
+              classes: {
+                input: 'non-resize'
+              }
+            }">
+              <FormKit v-model="trip.description" rows="10" cols="100" label="Trip description" type="textarea"
+                validation="required" placeholder="Write a description for your trip" />
+            </FormKit>
+            <FormKit label="Trip cover photo" type="file" placeholder="Pick a cover photo for your trip" />
+          </div>
+        </div>
+      </FormKit>
+    </div>
+    <div class="submit-form">
+      <Button @click="create" text="Create new trip" />
+    </div>
+
   </div>
+
 </template>
 
-<style scoped>
-.block {
-  margin-bottom: 18px;
-}
-
-#cover {
-  background-color: white;
-}
-
-.center {
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  margin-top: 12px;
-}
-
-.trip-create {
-  width: 400px;
-  margin: 16px auto;
-  font-size: 16px;
-  border-radius: 20px;
-}
-
-.trip-create-container label {
-  color: white;
-}
-
-.trip-create-container input {
-  border-radius: 10px;
-}
-
-/* Reset top and bottom margins from certain elements */
-.trip-create-header,
-.trip-create p {
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.trip-create-header {
-  background: #8338ec;
-  padding: 20px;
-  font-size: 1.4em;
-  font-weight: normal;
-  text-align: center;
-  text-transform: uppercase;
-  color: #fff;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
-}
-
-.trip-create-container {
-  background: #1a1a1c;
-  padding: 12px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
-}
-
-/* Every row inside .register-container is defined with p tags */
-.trip-create p {
-  padding: 12px;
-}
-
-.trip-create input {
-  box-sizing: border-box;
-  display: block;
+<style>
+.submit-form {
   width: 100%;
-  border-width: 1px;
-  border-style: solid;
-  padding: 16px;
-  outline: 0;
-  font-family: inherit;
-  font-size: 0.95em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.trip-create input[type="email"],
-.trip-create input[type="password"] {
-  background: #fff;
-  border-color: #bbb;
-  color: #555;
+.non-resize {
+  resize: none;
 }
 
-/* Text fields' focus effect */
-.trip-create input[type="email"]:focus,
-.trip-create input[type="password"]:focus {
-  border-color: #888;
+[data-invalid] .formkit-inner {
+  border-color: red;
+  box-shadow: 0 0 0 1px red;
 }
 
-.trip-create input[type="submit"] {
-  background: #8338ec;
-  border-color: transparent;
-  color: #fff;
-  cursor: pointer;
+[data-complete] .formkit-inner {
+  border-color: red;
+  box-shadow: 0 0 0 1px green;
 }
 
-.trip-create input[type="submit"]:hover {
-  background: #17c;
+[data-complete] .formkit-inner::after {
+  content: '✅';
+  display: block;
+  padding: 0.5em;
 }
 
-/* Buttons' focus effect */
-.register input[type="submit"]:focus {
-  border-color: #05a;
+.form-text-inputs {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-container {
+  justify-content: space-evenly;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 12px;
+  display: flex;
+}
+
+.container {
+  height: 80vh;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
 }
 </style>

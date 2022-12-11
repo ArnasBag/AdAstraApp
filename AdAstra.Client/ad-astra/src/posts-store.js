@@ -8,7 +8,8 @@ export default {
         posts: []
     },
     getters: {
-        posts: state => state.posts
+        posts: state => state.posts,
+        getPostById: state => (id) => state.posts.find(p => p.id == id)
     },
     mutations: {
         setPosts(state, posts) {
@@ -35,8 +36,8 @@ export default {
         setPosts({ commit }, posts) {
             commit('setPosts', posts)
         },
-        getPosts({ commit }) {
-            axios.get(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts`)
+        async getPosts({ commit }) {
+            await axios.get(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts`)
                 .then(response => {
                     commit('setPosts', response.data)
                 })
@@ -50,6 +51,7 @@ export default {
 
             axios.post(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts`, post, config)
                 .then(response => {
+                    console.log(response.data)
                     commit('addPost', response.data)
                 })
         },

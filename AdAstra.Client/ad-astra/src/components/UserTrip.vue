@@ -1,9 +1,14 @@
 <script>
 import Button from './Button.vue'
+import { promptModal } from "jenesius-vue-modal"
+import DeleteConfirmationModal from './DeleteConfirmationModal.vue'
+import TripEdit from '../components/TripEdit.vue'
 
 export default {
     components: {
         Button,
+        DeleteConfirmationModal,
+        TripEdit,
     },
 
     props: {
@@ -12,6 +17,18 @@ export default {
             required: true
         }
     },
+
+    methods: {
+        async deleteTrip() {
+            await promptModal(DeleteConfirmationModal, {
+                tripId: this.trip.id
+            })
+        },
+
+        async updateTrip() {
+            this.$router.push(`/trips/${this.trip.id}/edit`)
+        },
+    }
 }
 
 </script>
@@ -24,7 +41,7 @@ export default {
         </div>
         <div class="trip-content">
             <div class="trip-title">
-                <router-link :to="{ name: 'Trip', params: { tripId: trip.id } }">
+                <router-link :to="{ name: 'MyTripPosts', params: { tripId: trip.id } }">
                     <h1 class="trip-header">
                         {{ trip.name }}
                     </h1>
@@ -32,6 +49,14 @@ export default {
                 <div class="author-info">
                     <h3>John Johnson</h3>
                     <p>{{ new Date(trip.createdAt).toDateString() }}</p>
+                </div>
+            </div>
+            <div style="display: flex; justify-content:space-between;">
+                <div>
+                    <Button @click="updateTrip" class="btn" text="Edit" />
+                </div>
+                <div>
+                    <Button @click="deleteTrip" class="btn" text="Delete" />
                 </div>
             </div>
         </div>

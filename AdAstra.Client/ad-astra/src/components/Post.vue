@@ -12,7 +12,7 @@ export default {
 </script>
 
 <template>
-  <router-link class="card" :to="{ name: 'Post', params: { tripId: this.$route.params.tripId, postId: 1 } }">
+  <router-link class="card" :to="{ name: 'Post', params: { tripId: this.$route.params.tripId, postId: postData.id } }">
     <div class="card-background" :style="{ 'background-image': 'url(' + postData.photoUrl + ')' }"></div>
     <div class=" card-content">
       <p class="card-category">Category</p>

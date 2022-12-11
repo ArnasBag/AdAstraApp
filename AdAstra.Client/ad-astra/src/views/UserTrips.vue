@@ -1,5 +1,5 @@
 <script>
-import Trip from '../components/Trip.vue'
+import UserTrip from '../components/UserTrip.vue'
 import Button from '../components/Button.vue'
 import TripCreate from '../components/TripCreate.vue'
 
@@ -9,7 +9,7 @@ import { mapState, mapActions } from 'vuex'
 
 export default {
     components: {
-        Trip,
+        UserTrip,
         Button,
         TripCreate,
     },
@@ -36,10 +36,12 @@ export default {
 <template>
     <div class="content">
         <div class="side-nav">
-            <Button @click="createTrip" text="Add new trip" />
+            <router-link to="/trips/create">
+                <Button text="Add new trip" />
+            </router-link>
         </div>
         <div class="cards">
-            <Trip v-for="trip in trips" v-bind:key="trip.id" :trip="trip" />
+            <UserTrip v-for="trip in trips" v-bind:key="trip.id" :trip="trip" />
         </div>
 
     </div>

@@ -20,6 +20,11 @@
                 <a href="#" class="nav-link">Contact</a>
             </li>
             <li class="nav-item">
+                <router-link v-if="isAuthenticated" class="nav-link" to="/">{{ this.userName }} {{
+                        this.userLastName
+                }}</router-link>
+            </li>
+            <li class="nav-item">
                 <Button class="auth-btn" v-if="isAuthenticated" @click="logout" text="Logout" />
             </li>
         </ul>
@@ -41,7 +46,7 @@ export default {
     },
 
     computed: {
-        ...mapState('auth', ['isAuthenticated']),
+        ...mapState('auth', ['isAuthenticated', 'userName', 'userLastName']),
     },
 
     methods: {
@@ -50,6 +55,7 @@ export default {
             this.$router.push('/');
         },
     },
+
     mounted() {
 
         const hamburger = document.querySelector(".hamburger");

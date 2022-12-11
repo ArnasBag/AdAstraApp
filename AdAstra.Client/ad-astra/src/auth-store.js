@@ -7,18 +7,33 @@ export default {
     state: {
         // define the initial state of your store
         isAuthenticated: VueCookies.isKey('jwt'),
+        userName: '',
+        userLastName: '',
     },
     mutations: {
         // define the mutations that can be used to update the state
         setIsAuthenticated(state, isAuthenticated) {
             state.isAuthenticated = isAuthenticated;
+
+            if (state.isAuthenticated) {
+                var jwt = VueCookies.get('jwt');
+                var base64Url = jwt.split('.')[1];
+                var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+
+                var user = JSON.parse(jsonPayload);
+                state.userName = user.userFirstName
+                state.userLastName = user.userLastName
+            }
         },
     },
     actions: {
         // define the actions that can be used to update the state
-        login({ commit }, user) {
+        async login({ commit }, user) {
             if (user.email && user.password) {
-                axios.post('https://localhost:7097/api/authentication/login', {
+                await axios.post('https://localhost:7097/api/authentication/login', {
                     email: user.email,
                     password: user.password
                 })

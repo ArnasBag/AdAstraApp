@@ -3,8 +3,7 @@ import Trip from '../components/Trip.vue'
 import Button from '../components/Button.vue'
 import TripCreate from '../components/TripCreate.vue'
 import Comments from '../components/Comments.vue'
-
-import axios from 'axios';
+import { mapGetters, mapActions, mapState } from 'vuex'
 import { Comment } from 'vue';
 
 export default {
@@ -15,23 +14,29 @@ export default {
         Comments,
         Comment
     },
+
     data() {
         return {
             post: {
-                type: Object,
+                type: Object
             }
         }
+    },
+
+    computed: {
+        ...mapState('posts', ['posts']),
+        ...mapGetters('posts', ['getPostById']),
 
     },
-    created() {
-        axios.get('https://localhost:7097/api/trips/' + this.$route.params.tripId + '/posts/' + this.$route.params.postId)
-            .then(response => {
-                this.post = response.data;
-                console.log(response.data)
-            })
-            .catch(error => {
-                console.error(error);
-            });
+
+    methods: {
+        ...mapActions('posts', ['getPosts', 'setPosts']),
+    },
+
+    async created() {
+        await this.getPosts()
+        this.post = this.getPostById(this.$route.params.postId)
+
     },
 }
 
@@ -58,11 +63,18 @@ export default {
                     <h3>Description</h3>
                     <p>{{ post.description }}</p>
                 </div>
+                <div class="write-comment-container">
+                    <form @submit.prevent="writeComment">
+                        <textarea id="commentBody" name="commentBody" placeholder="Write a comment..."
+                            rows="5"></textarea>
+                    </form>
+                    <div class="write-comment-footer">
+                        <!-- <Button @onclick="writeComment" class="comment-btn" text="Comment" /> -->
+                    </div>
+                </div>
                 <div class="comments">
                     <Comments v-for="comment in post.comments" v-bind:key="comment.id" :comment="comment" />
-
                 </div>
-
             </div>
         </div>
     </div>
@@ -72,6 +84,27 @@ export default {
 </template>
 
 <style scoped>
+.write-comment-container {
+    width: 100%;
+    margin-top: 24px;
+}
+
+.write-comment-container textarea {
+    width: 100%;
+    font-family: 'Roboto';
+    background-color: #29292b;
+    color: white;
+    padding: 12px;
+    resize: none;
+}
+
+.comment-btn {
+    width: auto;
+    height: auto;
+    padding: 12px;
+    float: right;
+}
+
 .page {
     margin-top: 12px;
     display: flex;

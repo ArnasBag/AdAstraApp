@@ -8,8 +8,10 @@ export default {
         trips: []
     },
     getters: {
-        trips: state => state.trips
+        trips: state => state.trips,
+        getTripById: state => async (id) => await state.trips.find(p => p.id == id)
     },
+
     mutations: {
         setTrips(state, trips) {
             state.trips = trips
@@ -23,8 +25,8 @@ export default {
                 state.trips.splice(index, 1, trip)
             }
         },
-        deleteTrip(state, trip) {
-            const index = state.trips.findIndex(i => i.id === trip.id)
+        deleteTrip(state, tripId) {
+            const index = state.trips.findIndex(i => i.id === tripId)
             if (index !== -1) {
                 state.trips.splice(index, 1)
             }
@@ -32,9 +34,8 @@ export default {
     },
 
     actions: {
-        getTrips({ commit }) {
+        async getTrips({ commit }) {
             const jwt = VueCookies.get('jwt');
-
             var base64Url = jwt.split('.')[1];
             var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
             var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
@@ -43,9 +44,8 @@ export default {
 
             var user = JSON.parse(jsonPayload);
 
-            axios.get(`https://localhost:7097/api/users/${user.userId}/trips`)
+            await axios.get(`https://localhost:7097/api/users/${user.userId}/trips`)
                 .then(response => {
-                    console.log('it got here');
                     commit('setTrips', response.data)
                 })
         },
@@ -62,17 +62,34 @@ export default {
                 })
         },
         updateTrip({ commit }, trip) {
-            // Make an API call to update the item
-            axios.put(`/api/items/${trip.id}`, trip)
+            const jwt = VueCookies.get('jwt');
+
+            const config = {
+                headers: { Authorization: `Bearer ${jwt}` }
+            }
+
+            axios.put(`https://localhost:7097/api/trips/${trip.id}`, trip, config)
                 .then(response => {
-                    commit('updateTrip', response.data)
+                    commit('updateTrip', trip)
                 })
         },
-        deleteTrip({ commit }, trip) {
+        deleteTrip({ commit }, tripId) {
+            const jwt = VueCookies.get('jwt');
+
+            const config = {
+                headers: { Authorization: `Bearer ${jwt}` }
+            }
+
             // Make an API call to delete the item
-            axios.delete(`/api/items/${trip.id}`)
+            axios.delete(`https://localhost:7097/api/trips/${tripId}`, config)
                 .then(() => {
-                    commit('deleteTrip', trip)
+                    commit('deleteTrip', tripId)
+                })
+                .catch(error => {
+                    console.log(error.response.status)
+                    if (error.response.status == 400) {
+                        console.log("cant delete his one")
+                    }
                 })
         }
     }

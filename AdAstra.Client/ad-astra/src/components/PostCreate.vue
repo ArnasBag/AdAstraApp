@@ -1,6 +1,5 @@
 <script>
 import Button from './Button.vue'
-import { popModal } from 'jenesius-vue-modal'
 import { mapActions } from 'vuex';
 
 export default {
@@ -14,149 +13,93 @@ export default {
         }
     },
 
-    props: {
-        show: Boolean
-    },
-
     components: {
         Button,
     },
+
     methods: {
         ...mapActions('posts', ['addPost']),
 
         create() {
+            console.log(this.post)
             this.addPost(this.post)
-            popModal()
+            this.$router.push(`/my-trips/${this.$route.params.tripId}/posts`)
         }
     }
 }
 
 </script>
-
 <template>
-    <div class="post-create">
-        <h2 class="post-create-header">Create new post</h2>
+    <div class="container">
+        <div>
+            <FormKit type="form" id="createTripForm" @submit="create">
+                <div class="form-container">
+                    <div class="form-text-inputs">
+                        <FormKit v-model="post.title" label="Post title" type="text" validation="required"
+                            placeholder="Write a title for your post" />
+                        <!-- <FormKit v-model="post.photoUrl" label="Post photo" type="file"
+                            placeholder="Photo of your post" /> -->
+                        <FormKit v-model="post.review" label="Post review" type="textarea" validation="required"
+                            placeholder="Write a review for your post" />
 
-        <form class="post-create-container" @submit.prevent="create">
-            <div class="block">
-                <label for="name">Post title</label>
-                <input id="name" type="text" placeholder="Trip name" v-model="post.title">
-            </div>
-            <div class="block">
-                <label for="description">Post photo url</label>
-                <input id="description" type="text" placeholder="Trip description" v-model="post.photoUrl">
-            </div>
-            <div class="block">
-                <label for="location">Post review</label>
-                <input id="location" type="text" placeholder="Trip location" v-model="post.review">
-            </div>
-            <div class="center">
-                <Button style="margin: 0" text='Create' />
-            </div>
-        </form>
+                    </div>
+                </div>
+            </FormKit>
+        </div>
+        <div class="submit-form">
+            <Button @click="create" text="Create new post" />
+        </div>
+
     </div>
+
 </template>
 
-<style scoped>
-.block {
-    margin-bottom: 18px;
-}
-
-#cover {
-    background-color: white;
-}
-
-.center {
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    margin-top: 12px;
-}
-
-.post-create {
-    width: 400px;
-    margin: 16px auto;
-    font-size: 16px;
-    border-radius: 20px;
-}
-
-.post-create-container label {
-    color: white;
-}
-
-.post-create-container input {
-    border-radius: 10px;
-}
-
-/* Reset top and bottom margins from certain elements */
-.post-create-header,
-.post-create p {
-    margin-top: 0;
-    margin-bottom: 0;
-}
-
-.post-create-header {
-    background: #8338ec;
-    padding: 20px;
-    font-size: 1.4em;
-    font-weight: normal;
-    text-align: center;
-    text-transform: uppercase;
-    color: #fff;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-}
-
-.post-create-container {
-    background: #1a1a1c;
-    padding: 12px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-/* Every row inside .register-container is defined with p tags */
-.post-create p {
-    padding: 12px;
-}
-
-.post-create input {
-    box-sizing: border-box;
-    display: block;
+<style>
+.submit-form {
     width: 100%;
-    border-width: 1px;
-    border-style: solid;
-    padding: 16px;
-    outline: 0;
-    font-family: inherit;
-    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.post-create input[type="email"],
-.post-create input[type="password"] {
-    background: #fff;
-    border-color: #bbb;
-    color: #555;
+.non-resize {
+    resize: none;
 }
 
-/* Text fields' focus effect */
-.post-create input[type="email"]:focus,
-.post-create input[type="password"]:focus {
-    border-color: #888;
+[data-invalid] .formkit-inner {
+    border-color: red;
+    box-shadow: 0 0 0 1px red;
 }
 
-.post-create input[type="submit"] {
-    background: #8338ec;
-    border-color: transparent;
-    color: #fff;
-    cursor: pointer;
+[data-complete] .formkit-inner {
+    border-color: red;
+    box-shadow: 0 0 0 1px green;
 }
 
-.post-create input[type="submit"]:hover {
-    background: #17c;
+[data-complete] .formkit-inner::after {
+    content: '✅';
+    display: block;
+    padding: 0.5em;
 }
 
-/* Buttons' focus effect */
-.register input[type="submit"]:focus {
-    border-color: #05a;
+.form-text-inputs {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container {
+    justify-content: space-evenly;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 12px;
+    display: flex;
+}
+
+.container {
+    height: 80vh;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
 }
 </style>
