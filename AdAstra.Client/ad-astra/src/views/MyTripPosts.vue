@@ -48,20 +48,27 @@ export default {
 </template>
 
 <style scoped>
+.content {
+    height: 100%;
+    display: flex;
+}
+
 .side-nav {
     box-shadow: 0 0 11px rgba(33, 33, 33, .2);
     border-radius: 10px;
     padding: 12px;
-    width: 100%;
+    width: 20%;
     display: flex;
-    flex-direction: row;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
 }
 
 .cards {
     margin-top: 2%;
     margin-left: 5%;
     margin-right: 5%;
+    width: 80%;
+
 }
 
 .card-grid {
@@ -69,8 +76,6 @@ export default {
     grid-template-columns: repeat(1, 1fr);
     grid-column-gap: 24px;
     grid-row-gap: 24px;
-    max-width: 1200px;
-    width: 100%;
 }
 
 @media(min-width: 540px) {

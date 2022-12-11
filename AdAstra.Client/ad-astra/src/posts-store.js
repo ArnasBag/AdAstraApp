@@ -24,8 +24,8 @@ export default {
                 state.posts.splice(index, 1, post)
             }
         },
-        deletePost(state, post) {
-            const index = state.posts.findIndex(i => i.id === post.id)
+        deletePost(state, postId) {
+            const index = state.posts.findIndex(i => i.id === postId)
             if (index !== -1) {
                 state.posts.splice(index, 1)
             }
@@ -42,32 +42,91 @@ export default {
                     commit('setPosts', response.data)
                 })
         },
-        addPost({ commit }, post) {
+        async addPost({ commit }, post) {
             const jwt = VueCookies.get('jwt');
 
             const config = {
                 headers: { Authorization: `Bearer ${jwt}` }
             }
 
-            axios.post(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts`, post, config)
+            await axios.post(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts`, post, config)
                 .then(response => {
                     console.log(response.data)
                     commit('addPost', response.data)
                 })
         },
-        updatePost({ commit }, post) {
+        async updatePost({ commit }, post) {
+            const jwt = VueCookies.get('jwt');
+
+            const config = {
+                headers: { Authorization: `Bearer ${jwt}` }
+            }
+
             // Make an API call to update the item
-            axios.put(`/api/items/${post.id}`, post)
+            await axios.put(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts/${router.currentRoute.value.params.postId}`, post, config)
                 .then(response => {
-                    commit('updatePost', response.data)
+                    commit('updatePost', post)
                 })
         },
-        deletePost({ commit }, post) {
+        async deletePost({ commit }, postId) {
+            const jwt = VueCookies.get('jwt');
+
+            const config = {
+                headers: { Authorization: `Bearer ${jwt}` }
+            }
             // Make an API call to delete the item
-            axios.delete(`/api/items/${post.id}`)
+            await axios.delete(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts/${postId}`, config)
                 .then(() => {
-                    commit('deletePost', post)
+                    commit('deletePost', postId)
                 })
-        }
+        },
+        async addCommentToPost({ commit }, { postId, comment }) {
+            const jwt = VueCookies.get('jwt');
+
+            const config = {
+                headers: { Authorization: `Bearer ${jwt}` }
+            }
+            // Make an API call to delete the item
+            await axios.post(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts/${postId}/comments`, comment, config)
+                .then(async () => {
+                    await axios.get(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts`)
+                        .then(response => {
+                            commit('setPosts', response.data)
+                        })
+                })
+        },
+
+        async editPostComment({ commit }, { postId, comment }) {
+            const jwt = VueCookies.get('jwt');
+
+            const config = {
+                headers: { Authorization: `Bearer ${jwt}` }
+            }
+            // Make an API call to delete the item
+            await axios.put(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts/${postId}/comments/${comment.id}`, comment, config)
+                .then(async () => {
+                    await axios.get(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts`)
+                        .then(response => {
+                            commit('setPosts', response.data)
+                        })
+                })
+        },
+
+        async deletePostComment({ commit }, { postId, commentId }) {
+            const jwt = VueCookies.get('jwt');
+
+            const config = {
+                headers: { Authorization: `Bearer ${jwt}` }
+            }
+            // Make an API call to delete the item
+            await axios.delete(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts/${postId}/comments/${commentId}`, config)
+                .then(async () => {
+                    await axios.get(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts`)
+                        .then(response => {
+                            commit('setPosts', response.data)
+                        })
+                })
+        },
+
     }
 }

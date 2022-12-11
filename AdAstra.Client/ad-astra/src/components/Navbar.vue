@@ -11,21 +11,16 @@
                 </router-link>
             </li>
             <li class="nav-item">
-                <router-link class="nav-link" to="/trips">Trips</router-link>
+                <router-link class="nav-link" to="/trips">All trips</router-link>
             </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">About</a>
-            </li>
-            <li class="nav-item">
-                <a href="#" class="nav-link">Contact</a>
-            </li>
-            <li class="nav-item">
-                <router-link v-if="isAuthenticated" class="nav-link" to="/">{{ this.userName }} {{
+            <li class="nav-item" v-if="isAuthenticated">
+                <router-link class="nav-link" to="/">{{ this.userName }} {{
                         this.userLastName
                 }}</router-link>
             </li>
             <li class="nav-item">
                 <Button class="auth-btn" v-if="isAuthenticated" @click="logout" text="Logout" />
+                <Button class="auth-btn" v-else @click="login" text="Login" />
             </li>
         </ul>
         <div class="hamburger">
@@ -38,7 +33,9 @@
 
 <script>
 import Button from '../components/Button.vue'
+import Login from '@/components/Login.vue'
 import { mapState } from 'vuex'
+import { openModal } from 'jenesius-vue-modal'
 
 export default {
     components: {
@@ -54,6 +51,10 @@ export default {
             this.$store.dispatch('auth/logout');
             this.$router.push('/');
         },
+
+        login() {
+            openModal(Login);
+        }
     },
 
     mounted() {
@@ -103,7 +104,7 @@ export default {
     padding-right: 1%;
     background-color: #29292b;
     box-shadow: 0 0 11px rgba(33, 33, 33, .2);
-
+    z-index: 20;
 }
 
 .hamburger {
@@ -133,17 +134,11 @@ export default {
 .nav-link {
     font-size: 1.2rem;
     font-weight: 400;
-    color: #8338ec;
+    color: #8e4aed;
 }
 
 .nav-link:hover {
-    color: #482ff7;
-}
-
-.nav-logo {
-    font-size: 2.1rem;
-    font-weight: 500;
-    color: #482ff7;
+    background-color: blue;
 }
 
 @media only screen and (max-width: 768px) {

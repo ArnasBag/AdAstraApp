@@ -1,16 +1,47 @@
 <script>
+import { mapState, mapActions } from 'vuex'
+import Button from '../components/Button.vue'
 
 export default {
+    data() {
+        return {
+            edit: false,
+        }
+    },
+
+    components: {
+        Button,
+    },
+
     props: {
         comment: {
             required: true,
             type: Object
         }
     },
-    // created() {
-    //     console.log(comment)
-    // }
+    computed: {
+        ...mapState('auth', ['isAuthenticated', 'userName', 'userLastName']),
+        ...mapState('comments', ['comments'])
+    },
 
+    methods: {
+        ...mapActions('posts', ['editPostComment', 'deletePostComment']),
+
+
+        toggleEdit() {
+            this.edit = !this.edit
+        },
+
+        async editComment() {
+            await this.editPostComment({ postId: this.$route.params.postId, comment: this.comment })
+            this.toggleEdit()
+        },
+
+        async deleteComment() {
+            await this.deletePostComment({ postId: this.$route.params.postId, commentId: this.comment.id })
+            this.$emit('deletedComment');
+        }
+    }
 }
 
 </script>
@@ -20,13 +51,24 @@ export default {
         <div class="comment-header">
             <div class="comment-author">
                 <h1 style="color: #8338ec;">{{ comment.user.firstName }} {{ comment.user.lastName }}</h1>
+                <div v-if="comment.user.firstName === userName && comment.user.lastName === userLastName">
+                    <span @click="toggleEdit" style="color: var(--purple); margin-right: 12px;">
+                        <i class="fa-solid fa-pen-to-square fa-xl"></i>
+                    </span>
+                    <span @click="deleteComment" style="color: red">
+                        <i class="fa-solid fa-trash fa-xl"></i>
+                    </span>
+                </div>
             </div>
         </div>
         <div class="comment-content">
-            <p>{{ comment.body }}</p>
-        </div>
-        <div class="comment-impression">
-
+            <form v-if="edit" @submit.prevent="editComment">
+                <div style="display: flex; flex-direction: column;">
+                    <textarea v-model="comment.body"></textarea>
+                    <Button style="width: 10%; height: auto; padding: 5px; margin-top: 12px;" text="Save" />
+                </div>
+            </form>
+            <p v-else>{{ comment.body }}</p>
         </div>
     </div>
 </template>
@@ -36,9 +78,17 @@ h1 {
     font-size: 1.5rem;
 }
 
+textarea {
+    background-color: #2d2d30;
+    width: 100%;
+    resize: none;
+    padding: 5px;
+}
+
 .comment-author {
     display: flex;
     align-items: baseline;
+    justify-content: space-between;
 }
 
 .comment-content {

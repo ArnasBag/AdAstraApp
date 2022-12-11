@@ -34,7 +34,7 @@ export default {
     },
 
     actions: {
-        async getTrips({ commit }) {
+        async getUserTrips({ commit }) {
             const jwt = VueCookies.get('jwt');
             var base64Url = jwt.split('.')[1];
             var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -45,6 +45,12 @@ export default {
             var user = JSON.parse(jsonPayload);
 
             await axios.get(`https://localhost:7097/api/users/${user.userId}/trips`)
+                .then(response => {
+                    commit('setTrips', response.data)
+                })
+        },
+        async getTrips({ commit }) {
+            await axios.get(`https://localhost:7097/api/trips`)
                 .then(response => {
                     commit('setTrips', response.data)
                 })

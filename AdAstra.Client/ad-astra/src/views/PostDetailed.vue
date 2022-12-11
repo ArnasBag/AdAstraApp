@@ -1,10 +1,14 @@
 <script>
-import Trip from '../components/Trip.vue'
+import Trip from '../components/UserTrip.vue'
 import Button from '../components/Button.vue'
 import TripCreate from '../components/TripCreate.vue'
 import Comments from '../components/Comments.vue'
+import DeletePost from '../components/DeletePost.vue'
+
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { Comment } from 'vue';
+import { promptModal } from "jenesius-vue-modal"
+
 
 export default {
     components: {
@@ -12,31 +16,54 @@ export default {
         Button,
         TripCreate,
         Comments,
-        Comment
+        Comment,
+        DeletePost,
     },
 
     data() {
         return {
             post: {
                 type: Object
-            }
+            },
+            comment: {
+                body: ''
+            },
         }
     },
 
     computed: {
         ...mapState('posts', ['posts']),
         ...mapGetters('posts', ['getPostById']),
-
     },
 
     methods: {
-        ...mapActions('posts', ['getPosts', 'setPosts']),
+        ...mapActions('posts', ['getPosts', 'setPosts', 'addCommentToPost']),
+
+        async deletePost() {
+            await promptModal(DeletePost, {
+                postId: this.post.id
+            })
+        },
+
+        async updatePost() {
+            this.$router.push({ name: 'EditPost' })
+        },
+
+        async writeComment() {
+            await this.addCommentToPost({ postId: this.$route.params.postId, comment: this.comment })
+            this.post = await this.getPostById(this.$route.params.postId)
+            console.log(this.post)
+        },
+
+        async deletedCommentHandler() {
+            console.log('handler')
+            this.post = await this.getPostById(this.$route.params.postId)
+        }
     },
 
     async created() {
         await this.getPosts()
         this.post = this.getPostById(this.$route.params.postId)
-
     },
 }
 
@@ -45,8 +72,8 @@ export default {
 <template>
     <div class="page">
         <div class="sidebar">
-            <Button @on-click="showTripCreate = true" text="Edit post" />
-            <Button @on-click="showTripCreate = true" text="Delete post" />
+            <Button @click="updatePost" text="Edit post" />
+            <Button @click="deletePost" text="Delete post" />
         </div>
 
         <div class="container">
@@ -65,15 +92,17 @@ export default {
                 </div>
                 <div class="write-comment-container">
                     <form @submit.prevent="writeComment">
-                        <textarea id="commentBody" name="commentBody" placeholder="Write a comment..."
-                            rows="5"></textarea>
+                        <textarea v-model="comment.body" id="commentBody" name="commentBody"
+                            placeholder="Write a comment..." rows="5"></textarea>
+                        <div class="write-comment-footer">
+                            <Button class="comment-btn" text="Comment" />
+                        </div>
                     </form>
-                    <div class="write-comment-footer">
-                        <!-- <Button @onclick="writeComment" class="comment-btn" text="Comment" /> -->
-                    </div>
+
                 </div>
                 <div class="comments">
-                    <Comments v-for="comment in post.comments" v-bind:key="comment.id" :comment="comment" />
+                    <Comments @deletedComment="deletedCommentHandler" v-for="comment in post.comments"
+                        v-bind:key="comment.id" :comment="comment" />
                 </div>
             </div>
         </div>

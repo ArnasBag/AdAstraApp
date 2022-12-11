@@ -35,8 +35,8 @@ export default {
         setComments({ commit }, comments) {
             commit('setComments', comments)
         },
-        getComments({ commit }) {
-            axios.get(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts/${router.currentRoute.value.params.postId}/comments`)
+        async getComments({ commit }) {
+            await axios.get(`https://localhost:7097/api/trips/${router.currentRoute.value.params.tripId}/posts/${router.currentRoute.value.params.postId}/comments`)
                 .then(response => {
                     commit('setComments', response.data)
                 })

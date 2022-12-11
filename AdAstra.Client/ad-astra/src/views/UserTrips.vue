@@ -19,15 +19,15 @@ export default {
     },
 
     methods: {
-        ...mapActions('trips', ['getTrips']),
+        ...mapActions('trips', ['getUserTrips']),
 
         createTrip() {
             openModal(TripCreate)
         }
     },
 
-    created() {
-        this.getTrips()
+    async created() {
+        await this.getUserTrips()
     }
 }
 

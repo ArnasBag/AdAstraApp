@@ -18,7 +18,8 @@ export default {
 
 <template>
     <Navbar />
-    <router-view></router-view>
+    <router-view>
+    </router-view>
     <widget-container-modal />
     <!-- <Footer/> -->
 </template>

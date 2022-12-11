@@ -9,6 +9,7 @@ import TripCreate from '../components/TripCreate.vue'
 import TripEdit from '../components/TripEdit.vue'
 import MyTripPosts from '../views/MyTripPosts.vue'
 import PostCreate from '../components/PostCreate.vue'
+import PostEdit from '../components/PostEdit.vue'
 
 import store from '../auth-store';
 
@@ -72,6 +73,17 @@ const router = createRouter({
       path: '/my-trips/:tripId/posts/create',
       component: PostCreate,
       name: 'CreatePost',
+      beforeEnter: (to, from) => {
+        if (!store.state.isAuthenticated) {
+          return { name: 'WelcomeArea' }
+        }
+        return true
+      }
+    },
+    {
+      path: '/my-trips/:tripId/posts/:postId/edit',
+      component: PostEdit,
+      name: 'EditPost',
       beforeEnter: (to, from) => {
         if (!store.state.isAuthenticated) {
           return { name: 'WelcomeArea' }

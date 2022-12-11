@@ -2,7 +2,8 @@
 import Trip from '../components/Trip.vue'
 import Button from '../components/Button.vue'
 import TripCreate from '../components/TripCreate.vue'
-import axios from 'axios';
+
+import { mapState, mapActions } from 'vuex'
 
 export default {
   components: {
@@ -10,27 +11,17 @@ export default {
     Button,
     TripCreate,
   },
-  data() {
-    return {
-      showTripCreate: false,
-      trips: [],
-    }
+
+  computed: {
+    ...mapState('trips', ['trips'])
   },
 
   methods: {
-    async getTrips() {
-      try {
-        const response = await axios.get("https://localhost:7097/api/trips");
-        this.trips = response.data;
-      }
-      catch (error) {
-        console.log(error.response)
-      }
-    },
+    ...mapActions('trips', ['getTrips']),
   },
 
-  created() {
-    this.getTrips();
+  async created() {
+    await this.getTrips()
   }
 }
 
