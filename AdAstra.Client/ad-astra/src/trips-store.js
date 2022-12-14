@@ -55,26 +55,26 @@ export default {
                     commit('setTrips', response.data)
                 })
         },
-        addTrip({ commit }, trip) {
+        async addTrip({ commit }, trip) {
             const jwt = VueCookies.get('jwt');
 
             const config = {
                 headers: { Authorization: `Bearer ${jwt}` }
             }
 
-            axios.post('https://localhost:7097/api/trips', trip, config)
+            await axios.post('https://localhost:7097/api/trips', trip, config)
                 .then(response => {
                     commit('addTrip', response.data)
                 })
         },
-        updateTrip({ commit }, trip) {
+        async updateTrip({ commit }, trip) {
             const jwt = VueCookies.get('jwt');
 
             const config = {
                 headers: { Authorization: `Bearer ${jwt}` }
             }
-
-            axios.put(`https://localhost:7097/api/trips/${trip.id}`, trip, config)
+            console.log(trip)
+            await axios.put(`https://localhost:7097/api/trips/${trip.id}`, trip, config)
                 .then(response => {
                     commit('updateTrip', trip)
                 })

@@ -85,12 +85,7 @@ img {
     justify-content: center;
 }
 
-.trip-content {
-    background-color: #29292b;
-}
-
 .trip {
-    background-color: #29292b;
     margin: 32px;
     display: flex;
     flex-direction: column;

@@ -35,9 +35,6 @@ export default {
   <div class="content">
     <div class="side-nav">
       <Button text="Filter" />
-      <router-link to="/trips/create">
-        <Button text="Add new post" />
-      </router-link>
     </div>
     <div class="cards">
       <div class="card-grid">
@@ -61,6 +58,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  height: calc(100vh - 200px);
 }
 
 .cards {

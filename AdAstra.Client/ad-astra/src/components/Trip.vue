@@ -1,9 +1,16 @@
 <script>
 import Button from './Button.vue'
+import axios from 'axios';
 
 export default {
     components: {
         Button,
+    },
+
+    data() {
+        return {
+            user: Object,
+        }
     },
 
     props: {
@@ -12,6 +19,13 @@ export default {
             required: true
         }
     },
+
+    async created() {
+        await axios.get(`https://localhost:7097/api/users/${this.trip.userId}`)
+            .then(response => {
+                this.user = response.data
+            })
+    }
 }
 
 </script>
@@ -30,7 +44,7 @@ export default {
                     </h1>
                 </router-link>
                 <div class="author-info">
-                    <h3>John Johnson</h3>
+                    <h3>{{ this.user.firstName }} {{ this.user.lastName }}</h3>
                     <p>{{ new Date(trip.createdAt).toDateString() }}</p>
                 </div>
             </div>
@@ -60,12 +74,8 @@ img {
     justify-content: center;
 }
 
-.trip-content {
-    background-color: #29292b;
-}
 
 .trip {
-    background-color: #29292b;
     margin: 32px;
     display: flex;
     flex-direction: column;

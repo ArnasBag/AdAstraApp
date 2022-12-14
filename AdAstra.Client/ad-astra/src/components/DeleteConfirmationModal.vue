@@ -56,9 +56,9 @@ export default {
     justify-content: space-between;
     width: 40%;
     height: 40%;
-    background-color: #1a1a1c;
     padding: 24px;
     border-radius: 10px;
+    background-color: white;
 
 }
 </style>

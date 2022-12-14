@@ -1,21 +1,34 @@
 <script>
 import Button from './Button.vue'
-import { mapState } from 'vuex'
-
+import { mapState, mapActions } from 'vuex'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
 import { popModal } from 'jenesius-vue-modal'
 
 export default {
+  setup() {
+    return {
+      v$: useVuelidate()
+    }
+  },
+
   data() {
     return {
       user: {
         email: '',
         password: ''
-      }
+      },
+      invalidData: false,
     }
   },
 
-  props: {
-    show: Boolean
+  validations() {
+    return {
+      user: {
+        email: { required, email },
+        password: { required }
+      }
+    }
   },
 
   components: {
@@ -23,24 +36,24 @@ export default {
   },
 
   computed: {
-    ...mapState({
-      isAuthenticated: state => state.authentication.isAuthenticated,
-    }),
+    ...mapState('auth', ['isAuthenticated']),
   },
 
   methods: {
-    login() {
-      this.$store.dispatch('auth/login', this.user);
-      popModal();
+    ...mapActions('auth', ['login']),
 
+    async loginUser() {
+      await this.login(this.user)
+      console.log(this.isAuthenticated)
+      if (!this.isAuthenticated) {
+        this.invalidData = true
+      }
+      else {
+        popModal();
+        this.$router.push('my-trips')
+      }
     },
   },
-
-  watch: {
-    onAuthChange(newValue, oldValue) {
-      this.$router.push('/my-trips');
-    }
-  }
 
 }
 </script>
@@ -48,9 +61,15 @@ export default {
 <template>
   <div class="login">
     <h2 class="login-header">Log in</h2>
-    <form @submit.prevent="login" class="login-container">
+    <form @submit.prevent="loginUser" class="login-container">
       <p><input v-model="user.email" type="email" placeholder="Email"></p>
+      <span v-for="error in v$.user.email.$errors" style="color: red" v-if="v$.user.email.$error">{{ error.$message
+      }}</span>
       <p><input v-model="user.password" type="password" placeholder="Password"></p>
+      <span v-for="error in v$.user.password.$errors" style="color: red" v-if="v$.user.password.$error">{{
+          error.$message
+      }}</span>
+      <p v-if="invalidData" style="color: red">Invalid login data!</p>
       <div class="center">
         <Button style="margin: 0" text='Log in' />
       </div>
@@ -70,6 +89,7 @@ export default {
   margin: 16px auto;
   font-size: 16px;
   border-radius: 20px;
+  border: 5px solid #8338ec;
 }
 
 /* Reset top and bottom margins from certain elements */
@@ -92,14 +112,17 @@ export default {
 }
 
 .login-container {
-  background: #1a1a1c;
+  background: white;
   padding: 12px;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-radius: 10px;
 }
 
 /* Every row inside .login-container is defined with p tags */
 .login p {
+  padding: 12px;
+}
+
+span {
   padding: 12px;
 }
 
@@ -112,21 +135,24 @@ export default {
   padding: 16px;
   outline: 0;
   font-family: inherit;
-  font-size: 0.95em;
+  font-size: 1em;
 }
 
 .login input[type="email"],
-.login input[type="password"] {
+.login input[type="password"],
+.login input[type="text"] {
   background: #fff;
-  border-color: #bbb;
-  color: #555;
+  border-color: #8338ec;
+  border: 3px solid #8338ec;
   border-radius: 10px;
+  color: black;
 }
 
 /* Text fields' focus effect */
 .login input[type="email"]:focus,
-.login input[type="password"]:focus {
-  border-color: #888;
+.login input[type="password"]:focus,
+.login input[type="text"]:focus {
+  border-color: #8338ec;
 }
 
 .login input[type="submit"] {

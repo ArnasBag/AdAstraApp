@@ -4,6 +4,7 @@ import Button from '../components/Button.vue'
 import TripCreate from '../components/TripCreate.vue'
 import Comments from '../components/Comments.vue'
 import DeletePost from '../components/DeletePost.vue'
+import FormInput from '../components/FormInput.vue'
 
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { Comment } from 'vue';
@@ -18,6 +19,7 @@ export default {
         Comments,
         Comment,
         DeletePost,
+        FormInput,
     },
 
     data() {
@@ -34,6 +36,7 @@ export default {
     computed: {
         ...mapState('posts', ['posts']),
         ...mapGetters('posts', ['getPostById']),
+        ...mapState('auth', ['isAuthenticated', 'userName', 'userLastName']),
     },
 
     methods: {
@@ -70,8 +73,11 @@ export default {
 <template>
     <div class="page">
         <div class="sidebar">
-            <Button @click="updatePost" text="Edit post" />
-            <Button @click="deletePost" text="Delete post" />
+            <div v-if="isAuthenticated">
+                <Button @click="updatePost" text="Edit post" />
+                <Button @click="deletePost" text="Delete post" />
+            </div>
+
         </div>
 
         <div class="container">
@@ -85,17 +91,19 @@ export default {
                     <h1>{{ post.title }}</h1>
                 </div>
                 <div class="description">
-                    <h3>Description</h3>
-                    <p>{{ post.description }}</p>
+                    <p>{{ post.review }}</p>
                 </div>
-                <div class="write-comment-container">
-                    <form @submit.prevent="writeComment">
+                <div v-if="isAuthenticated" class="write-comment-container">
+                    <!-- <form @submit.prevent="writeComment">
                         <textarea v-model="comment.body" id="commentBody" name="commentBody"
                             placeholder="Write a comment..." rows="5"></textarea>
-                        <div class="write-comment-footer">
-                            <Button class="comment-btn" text="Comment" />
-                        </div>
-                    </form>
+
+                    </form> -->
+                    <FormInput v-model="comment.body" id="commentBody" label="Comment" type="textarea"
+                        placeholder="Write a comment..." rows="10" />
+                    <div class="write-comment-footer">
+                        <Button @click="writeComment" class="comment-btn" text="Comment" />
+                    </div>
 
                 </div>
                 <div class="comments">
@@ -119,7 +127,6 @@ export default {
 .write-comment-container textarea {
     width: 100%;
     font-family: 'Roboto';
-    background-color: #29292b;
     color: white;
     padding: 12px;
     resize: none;
@@ -142,19 +149,21 @@ export default {
     flex-direction: column;
     align-items: center;
     width: 20%;
+
 }
 
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh;
     width: 60%;
+    box-shadow: 0 0 11px rgba(33, 33, 33, .2);
+    border-radius: 12px;
+
 }
 
 .header {
     width: 100%;
-    background-color: #29292b;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
@@ -162,7 +171,6 @@ export default {
 .image-area {
     display: flex;
     justify-content: center;
-    background-color: #29292b;
     padding: 32px 32px 0 32px;
     border-radius: 10px;
 
@@ -178,7 +186,6 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
-    background-color: #29292b;
     padding: 0 32px 32px 32px
 }
 

@@ -3,6 +3,9 @@
 :root {
     --purple: #8e4aed;
     --white: #ffffff;
+    --light-gray: #29292b;
+    --dark-gray: #1a1a1c;
+    --border-radius-default: 10px;
   }
 
 * {
@@ -19,6 +22,13 @@ html {
     font-family: 'Roboto', sans-serif;
 }
 
+li {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
 
 #app{
     display: flex;
@@ -28,36 +38,6 @@ html {
 
 html, body{
     height: 100%;
-
     margin: 0;
-    background-color: #1a1a1c
-}
-h1, h2, h3, p{
-    color: white;
 }
 
-label{
-    color: #c8c8c8
-}
-
-input[type=text]{
-    color: #c8c8c8;
-}
-input[type=date]{
-    color: #c8c8c8;
-}
-input[type=file]::file-selector-button{
-    color: #c8c8c8;
-}
-
-textarea{
-    color: #c8c8c8 !important;
-}
-
-li {
-    list-style: none;
-}
-
-a {
-    text-decoration: none;
-}

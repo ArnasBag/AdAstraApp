@@ -64,8 +64,6 @@ export default {
 }
 
 .side-nav {
-    background-color: #29292b;
-    height: 100vh;
     box-shadow: 0 0 11px rgba(33, 33, 33, .2);
     border-radius: 10px;
     margin-top: 32px;
@@ -75,6 +73,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: calc(100vh - 200px);
 }
 
 .content {

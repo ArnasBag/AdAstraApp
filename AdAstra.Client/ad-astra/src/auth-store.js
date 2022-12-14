@@ -2,13 +2,28 @@ import Vuex from 'vuex';
 import VueCookies from 'vue-cookies'
 import axios from 'axios';
 
+function getName() {
+    var jwt = VueCookies.get('jwt');
+    if (jwt == null) {
+        return
+    }
+    var base64Url = jwt.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    var user = JSON.parse(jsonPayload);
+    return { firstName: user.userFirstName, lastName: user.userLastName }
+}
+
 export default {
     namespaced: true,
     state: {
         // define the initial state of your store
         isAuthenticated: VueCookies.isKey('jwt'),
-        userName: '',
-        userLastName: '',
+        userName: getName() ? getName().firstName : '',
+        userLastName: getName() ? getName().lastName : '',
     },
     mutations: {
         // define the mutations that can be used to update the state

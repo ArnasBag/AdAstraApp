@@ -13,15 +13,16 @@
                     <Button class="auth-btn" v-if="isAuthenticated" text="My trips" />
                 </router-link>
             </li>
+            <li class="nav-item">
+                <Button class="auth-btn" v-if="isAuthenticated" @click="logout" text="Logout" />
+                <Button class="auth-btn" v-else @click="login" text="Login" />
+            </li>
             <li class="nav-item" v-if="isAuthenticated">
                 <router-link class="nav-link" to="/">{{ this.userName }} {{
                         this.userLastName
                 }}</router-link>
             </li>
-            <li class="nav-item">
-                <Button class="auth-btn" v-if="isAuthenticated" @click="logout" text="Logout" />
-                <Button class="auth-btn" v-else @click="login" text="Login" />
-            </li>
+
         </ul>
         <div class="hamburger">
             <span class="bar"></span>
@@ -58,7 +59,6 @@ export default {
     },
 
     mounted() {
-
         const hamburger = document.querySelector(".hamburger");
         const navMenu = document.querySelector(".nav-menu");
 
@@ -102,9 +102,9 @@ export default {
     align-items: center;
     padding-left: 1%;
     padding-right: 1%;
-    background-color: #29292b;
     box-shadow: 0 0 11px rgba(33, 33, 33, .2);
-    z-index: 20;
+    z-index: 999;
+    background-color: white;
 }
 
 .hamburger {

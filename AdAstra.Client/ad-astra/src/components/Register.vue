@@ -65,12 +65,24 @@ export default {
     <h2 class="login-header">Registration</h2>
     <form @submit.prevent="registerUser" class="login-container">
       <p><input v-model="user.firstName" type="text" placeholder="First name"></p>
-      <!-- <div v-if="v$.firstName.$error">Name field has an error.</div> -->
+      <span v-for="error in v$.user.firstName.$errors" style="color: red" v-if="v$.user.firstName.$error">{{
+          error.$message
+      }}</span>
       <p><input v-model="user.lastName" type="text" placeholder="Last name"></p>
+      <span v-for="error in v$.user.lastName.$errors" style="color: red" v-if="v$.user.lastName.$error">{{
+          error.$message
+      }}</span>
       <p><input v-model="user.userName" type="text" placeholder="Username"></p>
-
+      <span v-for="error in v$.user.userName.$errors" style="color: red" v-if="v$.user.userName.$error">{{
+          error.$message
+      }}</span>
       <p><input v-model="user.email" type="email" placeholder="Email"></p>
+      <span v-for="error in v$.user.email.$errors" style="color: red" v-if="v$.user.email.$error">{{ error.$message
+      }}</span>
       <p><input v-model="user.password" type="password" placeholder="Password"></p>
+      <span v-for="error in v$.user.password.$errors" style="color: red" v-if="v$.user.password.$error">{{
+          error.$message
+      }}</span>
       <div class="center">
         <Button style="margin: 0" text='Register' />
       </div>
@@ -90,6 +102,8 @@ export default {
   margin: 16px auto;
   font-size: 16px;
   border-radius: 20px;
+
+  border: 5px solid #8338ec;
 }
 
 /* Reset top and bottom margins from certain elements */
@@ -112,7 +126,7 @@ export default {
 }
 
 .login-container {
-  background: #1a1a1c;
+  background: white;
   padding: 12px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
@@ -120,6 +134,10 @@ export default {
 
 /* Every row inside .login-container is defined with p tags */
 .login p {
+  padding: 12px;
+}
+
+span {
   padding: 12px;
 }
 
@@ -132,27 +150,29 @@ export default {
   padding: 16px;
   outline: 0;
   font-family: inherit;
-  font-size: 0.95em;
+  font-size: 1em;
 }
 
 .login input[type="email"],
-.login input[type="password"] {
+.login input[type="password"],
+.login input[type="text"] {
   background: #fff;
-  border-color: #bbb;
-  color: #555;
+  border-color: #8338ec;
+  border: 3px solid #8338ec;
   border-radius: 10px;
+  color: black;
 }
 
 /* Text fields' focus effect */
 .login input[type="email"]:focus,
-.login input[type="password"]:focus {
-  border-color: #888;
+.login input[type="password"]:focus,
+.login input[type="text"]:focus {
+  border-color: #8338ec;
 }
 
 .login input[type="submit"] {
   background: #8338ec;
   border-color: transparent;
-  color: #fff;
   cursor: pointer;
 }
 

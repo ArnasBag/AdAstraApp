@@ -1,6 +1,7 @@
 <script>
 import { mapState, mapActions } from 'vuex'
 import Button from '../components/Button.vue'
+import FormInput from '../components/FormInput.vue'
 
 export default {
     data() {
@@ -11,6 +12,7 @@ export default {
 
     components: {
         Button,
+        FormInput
     },
 
     props: {
@@ -64,7 +66,8 @@ export default {
         <div class="comment-content">
             <form v-if="edit" @submit.prevent="editComment">
                 <div style="display: flex; flex-direction: column;">
-                    <textarea v-model="comment.body"></textarea>
+                    <FormInput v-model="comment.body" id="body" type="textarea" rows="2" />
+                    <!-- <textarea v-model="comment.body"></textarea> -->
                     <Button style="width: 10%; height: auto; padding: 5px; margin-top: 12px;" text="Save" />
                 </div>
             </form>
@@ -79,7 +82,6 @@ h1 {
 }
 
 textarea {
-    background-color: #2d2d30;
     width: 100%;
     resize: none;
     padding: 5px;
@@ -100,6 +102,5 @@ textarea {
     border-radius: 10px;
     padding: 20px;
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
-    background-color: #2d2d30;
 }
 </style>
