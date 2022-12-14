@@ -12,15 +12,12 @@ export default {
         Login,
         Register,
     },
-    data() {
-        return {
-            showLogin: false,
-            showRegister: false,
-        }
-    },
     methods: {
         openLogin() {
             openModal(Login);
+        },
+        openRegister() {
+            openModal(Register);
         }
     }
 }
@@ -36,7 +33,7 @@ export default {
                     share exciting space photos.</p>
             </div>
             <div>
-                <Button text="Get started" />
+                <Button @click="openRegister" text="Get started" />
                 <h3 style="display: inline; margin-right: 30px; margin-left: 30px">or</h3>
                 <Button @click="openLogin" text="Log in" />
             </div>

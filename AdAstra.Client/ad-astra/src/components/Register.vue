@@ -1,70 +1,105 @@
 <script>
 import Button from './Button.vue'
-export default{
-    props: {
-        show: Boolean
-    },
-    components: {
-        Button
+import { mapState, mapActions } from 'vuex'
+import { popModal } from 'jenesius-vue-modal'
+import { useVuelidate } from '@vuelidate/core'
+import { required, email } from '@vuelidate/validators'
+
+export default {
+  setup() {
+    return {
+      v$: useVuelidate()
     }
+  },
+
+  data() {
+    return {
+      user: {
+        firstName: '',
+        lastName: '',
+        userName: '',
+        email: '',
+        password: ''
+      }
+    }
+  },
+
+  validations() {
+    return {
+      user: {
+        firstName: { required },
+        lastName: { required },
+        userName: { required },
+        email: { required, email },
+        password: { required }
+      }
+    }
+  },
+
+  components: {
+    Button
+  },
+
+  computed: {
+    ...mapState('auth', ['isAuthenticated']),
+  },
+
+  methods: {
+    ...mapActions('auth', ['register']),
+
+    async registerUser() {
+      this.v$.$validate()
+      if (this.v$.$errors.length == 0) {
+        await this.register(this.user)
+        popModal()
+        console.log(this.isAuthenticated)
+        this.$router.push('my-trips')
+      }
+    }
+  },
 }
 </script>
 
 <template>
-    <Transition name="register">
-        <div v-if="show" class="modal-mask">
-            <div class="register">         
-                <h2 class="register-header">Register</h2>
+  <div class="login">
+    <h2 class="login-header">Registration</h2>
+    <form @submit.prevent="registerUser" class="login-container">
+      <p><input v-model="user.firstName" type="text" placeholder="First name"></p>
+      <!-- <div v-if="v$.firstName.$error">Name field has an error.</div> -->
+      <p><input v-model="user.lastName" type="text" placeholder="Last name"></p>
+      <p><input v-model="user.userName" type="text" placeholder="Username"></p>
 
-                <form class="register-container">
-                    <p><input type="email" placeholder="Email"></p>
-                    <p><input type="password" placeholder="Password"></p>
-                    <div class="center">
-                        <Button style="margin: 0" text='Register'/>
-                    </div>
-                </form>
-            </div>               
-        </div>
-    </Transition>
+      <p><input v-model="user.email" type="email" placeholder="Email"></p>
+      <p><input v-model="user.password" type="password" placeholder="Password"></p>
+      <div class="center">
+        <Button style="margin: 0" text='Register' />
+      </div>
+    </form>
+  </div>
 </template>
 
 <style scoped>
-
-.center{
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-.modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
-  display: flex;
-  transition: opacity 0.1s ease;
+.center {
   justify-content: center;
   align-items: center;
+  text-align: center;
 }
-.register {
+
+.login {
   width: 400px;
   margin: 16px auto;
   font-size: 16px;
   border-radius: 20px;
-
 }
 
 /* Reset top and bottom margins from certain elements */
-.register-header,
-.register p {
+.login-header,
+.login p {
   margin-top: 0;
   margin-bottom: 0;
 }
 
-.register-header {
+.login-header {
   background: #8338ec;
   padding: 20px;
   font-size: 1.4em;
@@ -76,19 +111,19 @@ export default{
   border-top-right-radius: 10px;
 }
 
-.register-container {
-  background: white;
+.login-container {
+  background: #1a1a1c;
   padding: 12px;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
 
-/* Every row inside .register-container is defined with p tags */
-.register p {
+/* Every row inside .login-container is defined with p tags */
+.login p {
   padding: 12px;
 }
 
-.register input {
+.login input {
   box-sizing: border-box;
   display: block;
   width: 100%;
@@ -100,32 +135,33 @@ export default{
   font-size: 0.95em;
 }
 
-.register input[type="email"],
-.register input[type="password"] {
+.login input[type="email"],
+.login input[type="password"] {
   background: #fff;
   border-color: #bbb;
   color: #555;
+  border-radius: 10px;
 }
 
 /* Text fields' focus effect */
-.register input[type="email"]:focus,
-.register input[type="password"]:focus {
+.login input[type="email"]:focus,
+.login input[type="password"]:focus {
   border-color: #888;
 }
 
-.register input[type="submit"] {
+.login input[type="submit"] {
   background: #8338ec;
   border-color: transparent;
   color: #fff;
   cursor: pointer;
 }
 
-.register input[type="submit"]:hover {
+.login input[type="submit"]:hover {
   background: #17c;
 }
 
 /* Buttons' focus effect */
-.register input[type="submit"]:focus {
+.login input[type="submit"]:focus {
   border-color: #05a;
 }
 </style>

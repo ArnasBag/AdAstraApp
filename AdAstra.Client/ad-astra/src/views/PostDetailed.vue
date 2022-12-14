@@ -52,11 +52,9 @@ export default {
         async writeComment() {
             await this.addCommentToPost({ postId: this.$route.params.postId, comment: this.comment })
             this.post = await this.getPostById(this.$route.params.postId)
-            console.log(this.post)
         },
 
         async deletedCommentHandler() {
-            console.log('handler')
             this.post = await this.getPostById(this.$route.params.postId)
         }
     },

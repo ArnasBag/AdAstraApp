@@ -6,12 +6,12 @@
         </div>
         <ul class="nav-menu">
             <li class="nav-item">
+                <router-link class="nav-link" to="/trips">All trips</router-link>
+            </li>
+            <li class="nav-item">
                 <router-link to="/my-trips">
                     <Button class="auth-btn" v-if="isAuthenticated" text="My trips" />
                 </router-link>
-            </li>
-            <li class="nav-item">
-                <router-link class="nav-link" to="/trips">All trips</router-link>
             </li>
             <li class="nav-item" v-if="isAuthenticated">
                 <router-link class="nav-link" to="/">{{ this.userName }} {{
@@ -137,9 +137,7 @@ export default {
     color: #8e4aed;
 }
 
-.nav-link:hover {
-    background-color: blue;
-}
+.nav-link:hover {}
 
 @media only screen and (max-width: 768px) {
     .nav-menu {

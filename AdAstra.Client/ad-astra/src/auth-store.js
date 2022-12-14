@@ -12,7 +12,7 @@ export default {
     },
     mutations: {
         // define the mutations that can be used to update the state
-        setIsAuthenticated(state, isAuthenticated) {
+        async setIsAuthenticated(state, isAuthenticated) {
             state.isAuthenticated = isAuthenticated;
 
             if (state.isAuthenticated) {
@@ -47,13 +47,47 @@ export default {
                             expires
                         }
                         VueCookies.set('jwt', response.data.token, options)
+                        commit('setIsAuthenticated', true);
                     })
-                    .catch(function (error) {
+                    .catch((error) => {
                         console.log(error)
+
                     });
             }
-            commit('setIsAuthenticated', true);
         },
+
+        async register({ commit }, user) {
+            await axios.post('https://localhost:7097/api/authentication/register', user)
+                .then(async (response) => {
+                    await axios.post('https://localhost:7097/api/authentication/login', {
+                        email: user.email,
+                        password: user.password
+                    })
+                        .then((response) => {
+                            const expires = new Date()
+                            expires.setDate(expires.getDate() + 1)
+
+                            const options = {
+                                domain: '.example.com',
+                                path: '/',
+                                expires
+                            }
+                            console.log(response.data.token)
+                            VueCookies.set('jwt', response.data.token, options)
+                            commit('setIsAuthenticated', true);
+                        })
+                        .catch((error) => {
+                            console.log(error)
+
+                        });
+                })
+                .catch((error) => {
+                    console.log(error)
+
+                });
+
+        },
+
         logout({ commit }) {
             VueCookies.remove('jwt');
             commit('setIsAuthenticated', false);

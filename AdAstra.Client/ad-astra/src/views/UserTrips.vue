@@ -64,9 +64,12 @@ export default {
 }
 
 .side-nav {
+    background-color: #29292b;
+    height: 100vh;
     box-shadow: 0 0 11px rgba(33, 33, 33, .2);
     border-radius: 10px;
-    margin: 12px;
+    margin-top: 32px;
+    margin-left: 12px;
     padding: 12px;
     width: 20%;
     display: flex;

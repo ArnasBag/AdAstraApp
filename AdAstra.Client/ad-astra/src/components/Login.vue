@@ -32,9 +32,15 @@ export default {
     login() {
       this.$store.dispatch('auth/login', this.user);
       popModal();
-      this.$router.push('/trips');
+
     },
   },
+
+  watch: {
+    onAuthChange(newValue, oldValue) {
+      this.$router.push('/my-trips');
+    }
+  }
 
 }
 </script>
@@ -64,7 +70,6 @@ export default {
   margin: 16px auto;
   font-size: 16px;
   border-radius: 20px;
-
 }
 
 /* Reset top and bottom margins from certain elements */
